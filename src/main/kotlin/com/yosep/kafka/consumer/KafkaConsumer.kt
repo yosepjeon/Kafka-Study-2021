@@ -18,6 +18,6 @@ class KafkaConsumer {
     @Throws(IOException::class)
     @KafkaListener(topics = [REACTIVE_TOPIC], groupId = "foo")
     fun reactiveConsume(message: String) {
-        println("Consumed message $message")
+        println("Consumed reactive message $message")
     }
 }

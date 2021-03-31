@@ -2,9 +2,11 @@ package com.yosep.kafka.producer
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Mono
+import reactor.kafka.sender.SenderResult
+import java.util.*
 
 const val TOPIC = "exam";
 const val REACTIVE_TOPIC = "reactive-exam"
@@ -17,11 +19,12 @@ class KafkaProducer @Autowired constructor(
     fun sendMessage(message: String) {
         println("Produce message: $message")
         this.kafkaTemplate.send(TOPIC, message)
+
     }
     
-    fun sendMessageReactive(message: String) {
+    fun sendMessageReactive(message: String): Mono<SenderResult<Void>> {
         println("Reactive Produce message: $message")
-        this.reactiveKafkaProducerTemplate.send(REACTIVE_TOPIC, message)
+        return this.reactiveKafkaProducerTemplate.send(REACTIVE_TOPIC, message)
             .doOnError {
                 println("send fail.")
             }
